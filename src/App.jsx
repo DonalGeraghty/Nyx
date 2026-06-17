@@ -29,6 +29,129 @@ import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import { HabitDataProvider } from './context/HabitDataContext'
 
+const NAV_ITEMS = [
+  { to: '/habits', label: 'Habits', icon: 'habits', activePaths: ['/habits', '/month'] },
+  { to: '/todos', label: 'Todos', icon: 'todos', activePaths: ['/todos'] },
+  { to: '/goals', label: 'Goals', icon: 'goals', activePaths: ['/goals'] },
+  { to: '/sleep', label: 'Sleep', icon: 'sleep', activePaths: ['/sleep'] },
+  { to: '/achievements', label: 'Achievements', icon: 'achievements', activePaths: ['/achievements'] },
+  { to: '/export', label: 'Export', icon: 'export', activePaths: ['/export'] },
+  { to: '/flashcards', label: 'Flashcards', icon: 'flashcards', activePaths: ['/flashcards'] },
+  { to: '/calories', label: 'Calories', icon: 'calories', activePaths: ['/calories'] },
+  { to: '/stoic', label: 'Stoic', icon: 'stoic', activePaths: ['/stoic'] },
+  { to: '/recipes', label: 'Recipes', icon: 'recipes', activePaths: ['/recipes'] },
+  { to: '/pomodoro', label: 'Pomodoro', icon: 'pomodoro', activePaths: ['/pomodoro'] },
+]
+
+function NavIcon({ name }) {
+  const commonProps = {
+    className: 'nav-icon',
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: '2',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    'aria-hidden': 'true',
+  }
+
+  switch (name) {
+    case 'habits':
+      return (
+        <svg {...commonProps}>
+          <rect x="3" y="4" width="18" height="17" rx="2" />
+          <path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4" />
+        </svg>
+      )
+    case 'todos':
+      return (
+        <svg {...commonProps}>
+          <path d="M9 6h11M9 12h11M9 18h11" />
+          <path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2" />
+        </svg>
+      )
+    case 'goals':
+      return (
+        <svg {...commonProps}>
+          <circle cx="12" cy="12" r="8" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="12" cy="12" r="1" />
+        </svg>
+      )
+    case 'sleep':
+      return (
+        <svg {...commonProps}>
+          <path d="M20 15.5A8 8 0 0 1 8.5 4 7 7 0 1 0 20 15.5Z" />
+        </svg>
+      )
+    case 'achievements':
+      return (
+        <svg {...commonProps}>
+          <path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4Z" />
+          <path d="M5 5H3v2a4 4 0 0 0 4 4M19 5h2v2a4 4 0 0 1-4 4" />
+        </svg>
+      )
+    case 'export':
+      return (
+        <svg {...commonProps}>
+          <path d="M12 3v12M7 10l5 5 5-5" />
+          <path d="M5 19h14" />
+        </svg>
+      )
+    case 'flashcards':
+      return (
+        <svg {...commonProps}>
+          <rect x="5" y="5" width="14" height="14" rx="2" />
+          <path d="M3 9V7a4 4 0 0 1 4-4h2M15 21h2a4 4 0 0 0 4-4v-2M9 12h6" />
+        </svg>
+      )
+    case 'calories':
+      return (
+        <svg {...commonProps}>
+          <path d="M12 21c4 0 7-3 7-7 0-3-2-5-4-8-.5 2-1.5 3.5-3 4.5C10 8 9 6 9 3 6 6 5 9 5 14c0 4 3 7 7 7Z" />
+        </svg>
+      )
+    case 'stoic':
+      return (
+        <svg {...commonProps}>
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+          <path d="M9 7h7M9 11h5" />
+        </svg>
+      )
+    case 'recipes':
+      return (
+        <svg {...commonProps}>
+          <path d="M6 2v20M10 2v8a4 4 0 0 1-8 0V2M18 2v20M18 2c2 2 3 5 3 8h-3" />
+        </svg>
+      )
+    case 'pomodoro':
+      return (
+        <svg {...commonProps}>
+          <circle cx="12" cy="13" r="8" />
+          <path d="M12 13V8M9 2h6M15 4l2 2" />
+        </svg>
+      )
+    default:
+      return null
+  }
+}
+
+function DesktopNavLink({ item, isActive, onClick }) {
+  return (
+    <Link
+      to={item.to}
+      className={`nav-link nav-icon-link ${isActive ? 'active' : ''}`}
+      onClick={onClick}
+      aria-label={item.label}
+      title={item.label}
+    >
+      <NavIcon name={item.icon} />
+      <span className="nav-label-sr">{item.label}</span>
+    </Link>
+  )
+}
+
 function Navbar() {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [menuOpen, setMenuOpen] = useState(false)
@@ -76,43 +199,14 @@ function Navbar() {
 
         {/* Desktop nav links */}
         <div className="nav-links nav-links--desktop">
-          <Link
-            to="/habits"
-            className={`nav-link ${location.pathname === '/habits' || location.pathname === '/month' ? 'active' : ''}`}
-            onClick={scrollToTop}
-          >
-            Habits
-          </Link>
-          <Link to="/todos" className={`nav-link ${location.pathname === '/todos' ? 'active' : ''}`} onClick={scrollToTop}>
-            Todos
-          </Link>
-          <Link to="/goals" className={`nav-link ${location.pathname === '/goals' ? 'active' : ''}`} onClick={scrollToTop}>
-            Goals
-          </Link>
-          <Link to="/sleep" className={`nav-link ${location.pathname === '/sleep' ? 'active' : ''}`} onClick={scrollToTop}>
-            Sleep
-          </Link>
-          <Link to="/achievements" className={`nav-link ${location.pathname === '/achievements' ? 'active' : ''}`} onClick={scrollToTop}>
-            Achievements
-          </Link>
-          <Link to="/export" className={`nav-link ${location.pathname === '/export' ? 'active' : ''}`} onClick={scrollToTop}>
-            Export
-          </Link>
-          <Link to="/flashcards" className={`nav-link ${location.pathname === '/flashcards' ? 'active' : ''}`} onClick={scrollToTop}>
-            Flashcards
-          </Link>
-          <Link to="/calories" className={`nav-link ${location.pathname === '/calories' ? 'active' : ''}`} onClick={scrollToTop}>
-            Calories
-          </Link>
-          <Link to="/stoic" className={`nav-link ${location.pathname === '/stoic' ? 'active' : ''}`} onClick={scrollToTop}>
-            Stoic
-          </Link>
-          <Link to="/recipes" className={`nav-link ${location.pathname === '/recipes' ? 'active' : ''}`} onClick={scrollToTop}>
-            Recipes
-          </Link>
-          <Link to="/pomodoro" className={`nav-link ${location.pathname === '/pomodoro' ? 'active' : ''}`} onClick={scrollToTop}>
-            Pomodoro
-          </Link>
+          {NAV_ITEMS.map((item) => (
+            <DesktopNavLink
+              key={item.to}
+              item={item}
+              isActive={item.activePaths.includes(location.pathname)}
+              onClick={scrollToTop}
+            />
+          ))}
         </div>
 
         {/* Desktop right section */}

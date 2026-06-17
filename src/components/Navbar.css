@@ -90,10 +90,65 @@ button.nav-logout:hover {
 /* ── Desktop nav links (centre) ── */
 .nav-links--desktop {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 0.95rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
   align-items: center;
   justify-content: center;
+}
+
+.nav-icon-link {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.nav-icon {
+  width: 1.18rem;
+  height: 1.18rem;
+}
+
+.nav-icon-link::after {
+  content: attr(aria-label);
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  color: white;
+  background: rgba(15, 15, 35, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 0.3rem 0.45rem;
+  font-size: 0.74rem;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.nav-icon-link:hover::after,
+.nav-icon-link:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-label-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .nav-dropdown-wrap {
