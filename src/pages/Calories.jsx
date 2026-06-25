@@ -102,7 +102,7 @@ function Calories() {
   const email = user?.email || ''
   const today = useMemo(() => formatYmd(new Date()), [])
   const [history, setHistory] = useState({})
-  const [caloriesInput, setCaloriesInput] = useState('')
+  const [caloriesAddInput, setCaloriesAddInput] = useState('')
   const [weightInput, setWeightInput] = useState('')
   const [waterCustomInput, setWaterCustomInput] = useState('')
   const [error, setError] = useState('')
@@ -110,7 +110,7 @@ function Calories() {
   useEffect(() => {
     if (!email) {
       setHistory({})
-      setCaloriesInput('')
+      setCaloriesAddInput('')
       setWeightInput('')
       setWaterCustomInput('')
       return
@@ -124,11 +124,7 @@ function Calories() {
         setError('')
         setHistory(next)
         const todayRow = next[today] || {}
-        setCaloriesInput(
-          typeof todayRow.calories === 'number' && Number.isFinite(todayRow.calories)
-            ? String(Math.round(todayRow.calories))
-            : ''
-        )
+        setCaloriesAddInput('')
         setWeightInput(
           typeof todayRow.weight === 'number' && Number.isFinite(todayRow.weight)
             ? String(todayRow.weight)
@@ -138,7 +134,7 @@ function Calories() {
       } catch (e) {
         setError(e.message || 'Failed to load nutrition data')
         setHistory({})
-        setCaloriesInput('')
+        setCaloriesAddInput('')
         setWeightInput('')
         setWaterCustomInput('')
       }
@@ -192,7 +188,16 @@ function Calories() {
     () => dayKeys.map((k) => (typeof history[k]?.waterMl === 'number' ? history[k].waterMl : null)),
     [dayKeys, history]
   )
+  const todayCalories =
+    typeof history[today]?.calories === 'number' && Number.isFinite(history[today].calories)
+      ? Math.round(history[today].calories)
+      : 0
   const todayWaterMl = typeof history[today]?.waterMl === 'number' ? history[today].waterMl : 0
+
+  const addCalories = (kcalToAdd) => {
+    if (!Number.isFinite(kcalToAdd) || kcalToAdd <= 0) return
+    updateToday({ calories: todayCalories + Math.round(kcalToAdd) })
+  }
 
   const addWater = (mlToAdd) => {
     if (!Number.isFinite(mlToAdd) || mlToAdd <= 0) return
@@ -210,37 +215,60 @@ function Calories() {
         </header>
 
         <p className="hub-body">
-          Enter today's totals only for now: calories eaten and body weight. Meal and nutrient breakdown can be added
+          Log calories incrementally and record body weight for the day. Meal and nutrient breakdown can be added
           later. You can also track water intake in ml.
         </p>
         {error ? <p className="hub-body">{error}</p> : null}
 
-        <section className="hub-card" aria-label="Today inputs">
-          <h2>Today ({today})</h2>
+        <section className="hub-card" aria-label="Calorie tracking">
+          <h2>Calories ({today})</h2>
           <div className="hub-form-grid">
-            <label className="hub-field">
-              <span>Calories eaten (total)</span>
+            <p className="hub-water-total">
+              Today: <strong>{todayCalories} kcal</strong>
+            </p>
+            <div className="hub-water-custom">
               <input
                 className="hub-input"
                 type="number"
-                data-testid="calories-input"
-                min="0"
+                data-testid="calories-add-input"
+                min="1"
                 step="1"
-                placeholder="e.g. 2250"
-                value={caloriesInput}
-                onChange={(e) => {
-                  const v = e.target.value
-                  setCaloriesInput(v)
-                  if (v === '') updateToday({ calories: null })
-                  else {
-                    const n = Number.parseInt(v, 10)
-                    if (Number.isFinite(n) && n >= 0) updateToday({ calories: n })
+                placeholder="Calories to add"
+                value={caloriesAddInput}
+                onChange={(e) => setCaloriesAddInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key !== 'Enter') return
+                  e.preventDefault()
+                  const n = Number.parseInt(caloriesAddInput, 10)
+                  if (Number.isFinite(n) && n > 0) {
+                    addCalories(n)
+                    setCaloriesAddInput('')
                   }
                 }}
               />
-            </label>
+              <button
+                type="button"
+                className="hub-btn"
+                data-testid="calories-add-btn"
+                onClick={() => {
+                  const n = Number.parseInt(caloriesAddInput, 10)
+                  if (Number.isFinite(n) && n > 0) {
+                    addCalories(n)
+                    setCaloriesAddInput('')
+                  }
+                }}
+              >
+                Add calories
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section className="hub-card" aria-label="Weight">
+          <h2>Weight ({today})</h2>
+          <div className="hub-form-grid">
             <label className="hub-field">
-              <span>Weight</span>
+              <span>Weight (kg)</span>
               <input
                 className="hub-input"
                 type="number"
