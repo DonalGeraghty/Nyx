@@ -1,13 +1,14 @@
 import React from 'react'
 import {
   BrowserRouter as Router,
-  Link,
   Navigate,
   Outlet,
   Route,
   Routes,
   useLocation,
+  useNavigate,
 } from 'react-router-dom'
+import Dock from './components/Dock'
 import AccountPage from './pages/AccountPage'
 import DataPage from './pages/DataPage'
 import LoginSplash from './pages/LoginSplash'
@@ -16,44 +17,25 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 
 const ChartsPage = React.lazy(() => import('./pages/ChartsPage'))
 
-function Navbar() {
+function AppDock() {
   const location = useLocation()
-  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+  const { logout } = useAuth()
 
-  const scrollToTop = () => {
+  const goTo = (path) => {
+    navigate(path)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  return (
-    <nav className="navbar">
-      <div className="nav-container">
-        <div className="nav-logo">
-          <Link
-            to="/"
-            className={`nav-logo-link${location.pathname === '/' ? ' is-active' : ''}`}
-            onClick={scrollToTop}
-          >
-            <h2>NyxAI</h2>
-          </Link>
-        </div>
-        <div className="nav-actions">
-          {user?.email && <span className="nav-user-email">{user.email}</span>}
-          <Link to="/data" className="nav-action" onClick={scrollToTop}>
-            Data
-          </Link>
-          <Link to="/charts" className="nav-action" onClick={scrollToTop}>
-            Charts
-          </Link>
-          <Link to="/account" className="nav-action" onClick={scrollToTop}>
-            Account
-          </Link>
-          <button type="button" className="nav-action" data-testid="nav-sign-out" onClick={logout}>
-            Log out
-          </button>
-        </div>
-      </div>
-    </nav>
-  )
+  const items = [
+    { label: 'Home', icon: <span aria-hidden="true">⌂</span>, onClick: () => goTo('/'), current: location.pathname === '/' },
+    { label: 'Data', icon: <span aria-hidden="true">≡</span>, onClick: () => goTo('/data'), current: location.pathname === '/data' },
+    { label: 'Charts', icon: <span aria-hidden="true">▥</span>, onClick: () => goTo('/charts'), current: location.pathname === '/charts' },
+    { label: 'Account', icon: <span aria-hidden="true">●</span>, onClick: () => goTo('/account'), current: location.pathname === '/account' },
+    { label: 'Log out', icon: <span aria-hidden="true">↪</span>, onClick: logout, testId: 'nav-sign-out' },
+  ]
+
+  return <Dock items={items} />
 }
 
 function ProtectedLayout() {
@@ -71,7 +53,7 @@ function ProtectedLayout() {
 
   return (
     <div className="app">
-      <Navbar />
+      <AppDock />
       <Outlet />
     </div>
   )

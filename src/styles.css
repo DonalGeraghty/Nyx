@@ -69,45 +69,16 @@ button, input, textarea { font: inherit; }
 .login-splash-error { color: #ff8c8c; }
 .account-demo { color: var(--muted); }
 
-.navbar {
-  border-bottom: 1px solid var(--border);
-  background: var(--background);
-}
-
-.nav-container,
 .hub-inner {
   width: min(100% - 2rem, 60rem);
   margin-inline: auto;
 }
 
-.nav-container {
-  min-height: 4rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.nav-logo-link { text-decoration: none; }
-.nav-logo h2 { margin: 0; }
-.nav-actions { display: flex; align-items: center; gap: .75rem; }
-.nav-user-email { color: var(--muted); font-size: .85rem; }
-
-.nav-action {
-  padding: .5rem .75rem;
-  border: 1px solid var(--border);
-  border-radius: .5rem;
-  color: inherit;
-  background: var(--surface);
-  font: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.nav-action:hover, .nav-action:focus-visible { border-color: var(--border-hover); }
+.app > main { padding-bottom: 7rem; }
 
 .hub-page {
   position: relative;
-  min-height: calc(100vh - 4rem);
+  min-height: 100vh;
   display: grid;
   justify-items: center;
   align-items: start;
@@ -213,10 +184,6 @@ button, input, textarea { font: inherit; }
 .nyxai-home-card-title { font-weight: 700; }
 
 @media (max-width: 36rem) {
-  .nav-container { align-items: flex-start; gap: .75rem; padding-block: .75rem; }
-  .nav-actions { flex-wrap: wrap; justify-content: flex-end; }
-  .nav-user-email { display: none; }
-  .nav-action { padding: .4rem .6rem; }
   .message-composer button { width: 100%; }
 }
 
