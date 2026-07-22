@@ -1,11 +1,6 @@
 import React from 'react'
-
-const entries = [
-  { datetime: '2026-07-22T08:15:00', food: 'Porridge with berries', calories: 340, protein: '14 g' },
-  { datetime: '2026-07-22T12:30:00', food: 'Chicken salad', calories: 480, protein: '42 g' },
-  { datetime: '2026-07-22T15:45:00', food: 'Greek yoghurt', calories: 160, protein: '17 g' },
-  { datetime: '2026-07-22T19:10:00', food: 'Salmon, rice and vegetables', calories: 620, protein: '46 g' },
-].sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
+import { useAuth } from '../context/AuthContext'
+import { demoFoodEntries } from '../data/foodEntries'
 
 const formatDatetime = (datetime) => new Date(datetime).toLocaleString('en-IE', {
   day: '2-digit',
@@ -16,6 +11,11 @@ const formatDatetime = (datetime) => new Date(datetime).toLocaleString('en-IE', 
 })
 
 function DataPage() {
+  const { user } = useAuth()
+  const entries = user?.isDemo
+    ? [...demoFoodEntries].sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
+    : []
+
   return (
     <main className="content-page">
       <div className="content-inner">
@@ -45,9 +45,14 @@ function DataPage() {
                     <span className="data-food" title={entry.food}>{entry.food}</span>
                   </td>
                   <td>{entry.calories}</td>
-                  <td>{entry.protein}</td>
+                  <td>{entry.protein} g</td>
                 </tr>
               ))}
+              {!entries.length && (
+                <tr>
+                  <td colSpan="4">No food entries yet.</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

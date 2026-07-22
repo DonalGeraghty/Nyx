@@ -14,6 +14,8 @@ import LoginSplash from './pages/LoginSplash'
 import NyxAIHome from './pages/NyxAIHome'
 import { AuthProvider, useAuth } from './context/AuthContext'
 
+const ChartsPage = React.lazy(() => import('./pages/ChartsPage'))
+
 function Navbar() {
   const location = useLocation()
   const { user, logout } = useAuth()
@@ -38,6 +40,9 @@ function Navbar() {
           {user?.email && <span className="nav-user-email">{user.email}</span>}
           <Link to="/data" className="nav-action" onClick={scrollToTop}>
             Data
+          </Link>
+          <Link to="/charts" className="nav-action" onClick={scrollToTop}>
+            Charts
           </Link>
           <Link to="/account" className="nav-action" onClick={scrollToTop}>
             Account
@@ -78,6 +83,14 @@ function AppRoutes() {
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<NyxAIHome />} />
         <Route path="/data" element={<DataPage />} />
+        <Route
+          path="/charts"
+          element={(
+            <React.Suspense fallback={<div className="page-loading">Loading charts…</div>}>
+              <ChartsPage />
+            </React.Suspense>
+          )}
+        />
         <Route path="/account" element={<AccountPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
