@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   AUTH_LOGIN: '/api/auth/login',
   AUTH_ME: '/api/auth/me',
   AUTH_DELETE_ACCOUNT: '/api/auth/account',
+  OPENAI_KEY: '/api/user/openai-key',
 }
 
 const TOKEN_KEY = 'dg_auth_token'

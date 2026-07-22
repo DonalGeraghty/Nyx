@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import OpenAIKeySettings from '../components/OpenAIKeySettings'
 import { useAuth } from '../context/AuthContext'
 
 function AccountPage() {
@@ -42,9 +43,13 @@ function AccountPage() {
           </Link>
         </header>
 
-        {user?.isDemo ? (
+        {user?.isDemo && (
           <p className="account-demo">This is a local dummy account. No account data is stored on the server.</p>
-        ) : (
+        )}
+
+        <OpenAIKeySettings />
+
+        {!user?.isDemo && (
           <section className="account-danger" aria-labelledby="danger-heading">
           <h2 id="danger-heading" className="account-danger-title">
             Delete account
