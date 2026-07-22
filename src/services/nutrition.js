@@ -34,15 +34,39 @@ export async function analyzeMeal(message) {
 }
 
 export async function logMeal(items, sourceMessage) {
+  return createMealEntry({
+    items,
+    sourceMessage,
+    eatenAt: new Date().toISOString(),
+  })
+}
+
+export async function createMealEntry({ items, sourceMessage = null, eatenAt }) {
   const data = await nutritionRequest(API_ENDPOINTS.NUTRITION_ENTRIES, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       items,
       source_message: sourceMessage,
-      eaten_at: new Date().toISOString(),
+      eaten_at: eatenAt,
     }),
   })
+  return data.entry
+}
+
+export async function updateMealEntry(entryId, { items, sourceMessage = null, eatenAt }) {
+  const data = await nutritionRequest(
+    `${API_ENDPOINTS.NUTRITION_ENTRIES}/${encodeURIComponent(entryId)}`,
+    {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items,
+        source_message: sourceMessage,
+        eaten_at: eatenAt,
+      }),
+    }
+  )
   return data.entry
 }
 
@@ -54,6 +78,12 @@ export async function listMeals(limit = 100) {
   return data.entries || []
 }
 
+export async function deleteMeal(entryId) {
+  await nutritionRequest(`${API_ENDPOINTS.NUTRITION_ENTRIES}/${encodeURIComponent(entryId)}`, {
+    method: 'DELETE',
+  })
+}
+
 export function toDisplayEntries(entries) {
   return entries.map((entry) => ({
     id: entry.id,
@@ -63,5 +93,7 @@ export function toDisplayEntries(entries) {
       .join(', '),
     calories: entry.total_calories,
     protein: entry.total_protein_g,
+    items: entry.items || [],
+    sourceMessage: entry.source_message || null,
   }))
 }

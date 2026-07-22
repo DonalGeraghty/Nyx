@@ -77,7 +77,7 @@ The authentication token is stored locally under `dg_auth_token` and sent as a b
 
 The account page can save, replace, inspect, and remove the signed-in user's OpenAI API key. NyxAI keeps the plaintext key only in temporary component state and sends it directly to Janus over HTTPS. Janus verifies and encrypts it with Google Cloud KMS; NyxAI never stores the key in browser storage and can retrieve only safe status metadata.
 
-The home-page composer sends a meal description to Janus for structured calorie and protein estimates. Results are shown for review and are persisted only after the user selects **Log meal**.
+The home-page composer sends a meal description to Janus for structured calorie and protein estimates. Results are shown for review and are persisted only after the user selects **Log meal**. Saved entries appear in the Data table, where their owner can manually add entries, edit every food item in an entry, or permanently delete an entry from Janus and Firestore.
 
 ## Storybook
 
