@@ -1,6 +1,6 @@
-# Minerva
+# NyxAI
 
-Minerva is a small authenticated React/Vite frontend. Authentication and account management are provided by the Janus API hosted on Google Cloud Run.
+NyxAI is a small authenticated React/Vite frontend named for Nyx, the Greek goddess of night. Authentication and account management are provided by the Janus API hosted on Google Cloud Run.
 
 ## Features
 

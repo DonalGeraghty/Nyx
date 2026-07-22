@@ -8,7 +8,7 @@ function NavbarPreview() {
         <div className="nav-container">
           <div className="nav-logo">
             <Link to="/" className="nav-logo-link is-active">
-              <h2>Minerva</h2>
+              <h2>NyxAI</h2>
             </Link>
           </div>
           <div className="nav-right nav-right--desktop">

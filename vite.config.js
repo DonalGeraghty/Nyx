@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Minerva — frontend (codename: Roman goddess Minerva).
+// NyxAI — named for Nyx, the Greek goddess of night.
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],

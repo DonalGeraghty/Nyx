@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom'
 import AccountPage from './pages/AccountPage'
 import LoginSplash from './pages/LoginSplash'
-import MinervaHome from './pages/MinervaHome'
+import NyxAIHome from './pages/NyxAIHome'
 import { AuthProvider, useAuth } from './context/AuthContext'
 
 function Navbar() {
@@ -50,7 +50,7 @@ function Navbar() {
             className={`nav-logo-link${location.pathname === '/' ? ' is-active' : ''}`}
             onClick={scrollToTop}
           >
-            <h2>Minerva</h2>
+            <h2>NyxAI</h2>
           </Link>
         </div>
 
@@ -142,7 +142,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route element={<ProtectedLayout />}>
-        <Route path="/" element={<MinervaHome />} />
+        <Route path="/" element={<NyxAIHome />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
