@@ -96,8 +96,7 @@ function NyxAIHome() {
       />
       <div className="hub-inner">
         <header className="hub-header">
-          <h1 className="hub-title">Nutrition analysis and logging</h1>
-          <h3 className="hub-subtitle">Powered by NyxAI</h3>
+          <h1 className="hub-title">NYX//AI</h1>
         </header>
 
         <form className="message-composer" onSubmit={handleSubmit}>
