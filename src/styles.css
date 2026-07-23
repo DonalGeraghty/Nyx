@@ -167,9 +167,13 @@ button, input, textarea { font: inherit; }
 .data-page-heading { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
 .data-page-heading h1 { margin-bottom: .25rem; }
 .data-page-heading p { margin-top: 0; }
+.data-heading-actions { display: flex; gap: .65rem; }
 .data-add-button,
+.data-export-button,
 .data-edit-button { padding: .4rem .65rem; border: 1px solid var(--border-hover); border-radius: .4rem; color: inherit; background: var(--surface-raised); cursor: pointer; }
-.data-add-button { margin-top: .25rem; padding: .6rem .9rem; white-space: nowrap; }
+.data-add-button,
+.data-export-button { margin-top: .25rem; padding: .6rem .9rem; white-space: nowrap; }
+.data-export-button:disabled { opacity: .45; cursor: not-allowed; }
 .data-row-actions { display: flex; gap: .4rem; }
 .data-edit-button:disabled { opacity: .45; cursor: not-allowed; }
 
@@ -330,7 +334,9 @@ button, input, textarea { font: inherit; }
   .data-page-heading,
   .entry-editor-heading,
   .entry-editor-actions { display: grid; }
+  .data-heading-actions { display: grid; }
   .data-add-button,
+  .data-export-button,
   .entry-editor-actions button { width: 100%; }
   .entry-editor-item { grid-template-columns: 1fr; }
 }

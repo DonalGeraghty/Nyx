@@ -10,6 +10,7 @@ import {
   toDisplayEntries,
   updateMealEntry,
 } from '../services/nutrition'
+import { foodEntriesToCsv } from '../utils/csv'
 
 const formatDatetime = (datetime) => new Date(datetime).toLocaleString('en-IE', {
   day: '2-digit',
@@ -102,6 +103,21 @@ function DataPage() {
     }
   }
 
+  const handleExport = () => {
+    const csv = foodEntriesToCsv(entries)
+    const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' })
+    const downloadUrl = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const exportDate = new Date().toISOString().slice(0, 10)
+
+    link.href = downloadUrl
+    link.download = `nyxai-food-entries-${exportDate}.csv`
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    URL.revokeObjectURL(downloadUrl)
+  }
+
   return (
     <main className="content-page">
       <div className="content-inner">
@@ -110,11 +126,21 @@ function DataPage() {
             <h1>Data</h1>
             <p>Recent food entries.</p>
           </div>
-          {!user?.isDemo && (
-            <button type="button" className="data-add-button" onClick={() => setEditor({ mode: 'add' })}>
-              Add row
+          <div className="data-heading-actions">
+            <button
+              type="button"
+              className="data-export-button"
+              onClick={handleExport}
+              disabled={loading || !entries.length}
+            >
+              Export CSV
             </button>
-          )}
+            {!user?.isDemo && (
+              <button type="button" className="data-add-button" onClick={() => setEditor({ mode: 'add' })}>
+                Add row
+              </button>
+            )}
+          </div>
         </div>
         {error && <p className="content-error" role="alert">{error}</p>}
         {editor && (
